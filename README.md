@@ -5,12 +5,12 @@ Este proyecto consiste en el diseño e implementación de un modelo de datos par
 
 La práctica incluye:
 
--Modelado entidad-relación
--Creación de base de datos en PostgreSQL
--Construcción de tabla detallada (ivr_detail)
--Generación de campos derivados y flags analíticos
--Construcción de tabla resumen (ivr_summary)
--Creación de función de limpieza (clean_integer)
+- Modelado entidad-relación
+- Creación de base de datos en PostgreSQL
+- Construcción de tabla detallada (ivr_detail)
+- Generación de campos derivados y flags analíticos
+- Construcción de tabla resumen (ivr_summary)
+- Creación de función de limpieza (clean_integer)
 
 El objetivo principal es aplicar conceptos avanzados de SQL, modelado de datos y transformación analítica.
 
@@ -18,11 +18,11 @@ El objetivo principal es aplicar conceptos avanzados de SQL, modelado de datos y
 
 El sistema se basa en tres tablas fuente:
 
--ivr_calls → Información general de la llamada
+- ivr_calls → Información general de la llamada
 
--ivr_modules → Módulos por los que pasa la llamada
+- ivr_modules → Módulos por los que pasa la llamada
 
--ivr_steps → Pasos dentro de cada módulo
+- ivr_steps → Pasos dentro de cada módulo
 
 Tal como se describe en el enunciado ():
 
@@ -34,27 +34,27 @@ ivr_steps se relaciona con ivr_modules mediante ivr_id + module_sequence
 
 Se diseñó un modelo relacional que permite:
 
--Representar la jerarquía llamada → módulo → step
--Mantener integridad referencial
--Permitir explotación analítica posterior
+- Representar la jerarquía llamada → módulo → step
+- Mantener integridad referencial
+- Permitir explotación analítica posterior
 
 El modelo respeta:
 
--PKs y FKs correctamente definidas
--Cardinalidades 1:N entre llamadas y módulos
--Cardinalidades 1:N entre módulos y steps
+- PKs y FKs correctamente definidas
+- Cardinalidades 1:N entre llamadas y módulos
+- Cardinalidades 1:N entre módulos y steps
 
 ## 🗄️ 2️⃣ Creación de Base de Datos
 
 Se desarrolló un script SQL compatible con PostgreSQL que:
 
--Crea todas las tablas
+- Crea todas las tablas
 
--Define restricciones
+- Define restricciones
 
--Implementa claves primarias y foráneas
+- Implementa claves primarias y foráneas
 
--Garantiza integridad referencial
+- Garantiza integridad referencial
 
 ## 📊 3️⃣ Tabla ivr_detail
 
@@ -62,7 +62,7 @@ Se construyó la tabla ivr_detail, que representa el nivel más granular del mod
 
 Incluye:
 
-📞 Datos de llamada
+**📞 Datos de llamada**
 
 calls_ivr_id
 
@@ -82,7 +82,7 @@ calls_customer_segment
 
 calls_ivr_language
 
-📅 Campos calculados de fecha
+**📅 Campos calculados de fecha**
 
 calls_start_date_id → formato yyyymmdd
 
@@ -110,7 +110,7 @@ step_result
 
 step_description_error
 
-👤 Identificación del cliente
+**👤 Identificación del cliente**
 
 document_type
 
@@ -121,7 +121,7 @@ customer_phone
 billing_account_id
 
 ## 🧮 4️⃣ Campos Derivados
-🔹 vdn_aggregation
+**🔹 vdn_aggregation**
 
 Generalización de vdn_label según lógica definida ():
 
@@ -133,7 +133,7 @@ Resto	RESTO
 
 Implementado mediante CASE.
 
-🔹 Identificación de cliente
+**🔹 Identificación de cliente**
 
 Se construyen los siguientes campos garantizando un único valor por llamada:
 
@@ -153,7 +153,7 @@ Funciones de ventana
 
 Priorización de valores válidos
 
-🔹 Flags analíticos
+**🔹 Flags analíticos**
 
 Según el enunciado ():
 
@@ -179,7 +179,7 @@ CUSTOMERINFOBYDNI.TX
 
 con step_result = 'OK'
 
-🔹 Repeated Phone Analysis (24H)
+**🔹 Repeated Phone Analysis (24H)**
 
 Campos:
 
@@ -187,7 +187,7 @@ repeated_phone_24H
 
 cause_recall_phone_24H
 
-Como indica el enunciado ():
+
 
 Se evalúa si el mismo phone_number tiene:
 
@@ -209,7 +209,7 @@ Funciones de ventana particionadas por phone_number
 
 Se crea una tabla resumen con 1 registro por llamada, consolidando todos los indicadores ().
 
-Campos incluidos:
+**Campos incluidos:**
 
 ivr_id
 
